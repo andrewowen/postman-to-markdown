@@ -1,0 +1,30 @@
+{
+  "name": "postman-to-markdown",
+  "version": "0.0.1",
+  "description": "Postman collection to markdown generator",
+  "main": "index.js",
+  "scripts": {
+    "build": "gulp build",
+    "watch": "gulp",
+    "prepublish": "npm run build"
+  },
+  "keywords": [
+    "markdown",
+    "postman",
+    "api",
+    "documentation"
+  ],
+  "author": "Nish Tahir <nishtahir@outlook.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "json2md": "^1.6.1"
+  },
+  "devDependencies": {
+    "babel-cli": "6",
+    "babel-preset-es2015": "6",
+    "commander": "^2.16.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-watch": "^5.0.1"
+  }
+}
