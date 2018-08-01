@@ -1,19 +1,19 @@
 #!/usr/bin/env node
-import fs from 'fs'
-import path from 'path'
+import fs from "fs";
+import path from "path";
 import json2md from "json2md";
-import program from 'commander'
+import program from "commander";
 
 String.prototype.replaceAll = function (search, replacement) {
   return this.split(search).join(replacement);
 }
 
-program.version('0.0.1')
-  .description('A postman collection to markdown generator.')
-  .command('* <file>')
+program.version("0.0.1")
+  .description("A postman collection to markdown generator.")
+  .command("* <file>")
   .action(file => {
     const filePath = path.resolve(file);
-    const readOptions = { flag: 'r+', encoding: 'utf8' };
+    const readOptions = { flag: "r+", encoding: "utf8" };
     fs.readFile(filePath, readOptions, (err, data) => {
       if (err) { fatalError(err); }
 
@@ -54,13 +54,22 @@ function convertItemToMarkdown(item, pathPrefix = "") {
     { code: { "language": "txt", "content": `/${item.request.url.path.join("/")}` || "" } },
     { h3: "Method" },
     { code: { "language": "txt", "content": item.request.method || "" } },
+    { h2: "Request" },
+    { h3: "Headers" },
+    {
+      table: {
+        headers: ["key", "value"],
+        rows: item.request.header || []
+      }
+    },
     { h3: "Body" },
     { code: { "language": "txt", "content": item.request.body.raw || "" } },
-  ]
+    { h2: "Response" }
+  ];
   return {
     path: `${pathPrefix}/${item.name}`,
     data: json2md(markdownModel)
-  }
+  };
 }
 
 function fatalError(err) {
@@ -73,26 +82,26 @@ function fatalError(err) {
  */
 function mkDirByPathSync(targetDir, { isRelativeToScript = false } = {}) {
   const sep = path.sep;
-  const initDir = path.isAbsolute(targetDir) ? sep : '';
-  const baseDir = isRelativeToScript ? __dirname : '.';
+  const initDir = path.isAbsolute(targetDir) ? sep : "";
+  const baseDir = isRelativeToScript ? __dirname : ".";
 
   return targetDir.split(sep).reduce((parentDir, childDir) => {
     const curDir = path.resolve(baseDir, parentDir, childDir);
     try {
       fs.mkdirSync(curDir);
     } catch (err) {
-      if (err.code === 'EEXIST') { // curDir already exists!
+      if (err.code === "EEXIST") { // curDir already exists!
         return curDir;
       }
 
       // To avoid `EISDIR` error on Mac and `EACCES`-->`ENOENT` and `EPERM` on Windows.
-      if (err.code === 'ENOENT') { // Throw the original parentDir error on curDir `ENOENT` failure.
-        throw new Error(`EACCES: permission denied, mkdir '${parentDir}'`);
+      if (err.code === "ENOENT") { // Throw the original parentDir error on curDir `ENOENT` failure.
+        throw new Error(`EACCES: permission denied, mkdir "${parentDir}"`);
       }
 
-      const caughtErr = ['EACCES', 'EPERM', 'EISDIR'].indexOf(err.code) > -1;
+      const caughtErr = ["EACCES", "EPERM", "EISDIR"].indexOf(err.code) > -1;
       if (!caughtErr || caughtErr && targetDir === curDir) {
-        throw err; // Throw if it's just the last created dir.
+        throw err; // Throw if it"s just the last created dir.
       }
     }
 

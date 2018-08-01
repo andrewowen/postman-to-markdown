@@ -2,11 +2,14 @@
   "name": "postman-to-markdown",
   "version": "0.0.1",
   "description": "Postman collection to markdown generator",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "gulp build",
     "watch": "gulp",
     "prepublish": "npm run build"
+  },
+  "bin": {
+    "p2md": "./dist/lib.js"
   },
   "keywords": [
     "markdown",
